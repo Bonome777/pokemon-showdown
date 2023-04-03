@@ -29,7 +29,7 @@ Object.entries(speciesIdByNumber).forEach(([num, speciesIdList]) => speciesIdLis
 let icons: {[username: string]: string} = JSON.parse(FS("config/icons.json").readIfExistsSync() || '{}');
 
 function reloadCSS() {
-	let req = https.get('https://play.pokemonshowdown.com/customcss.php?server=' + (Config.serverid), () => {});
+	let req = https.get(`https://play.pokemonshowdown.com/customcss.php?server=${Config.serverid}&invalidate`, () => {});
 	req.end();
 }
 
