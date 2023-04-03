@@ -624,13 +624,13 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 	bugtohero: {
 		onSwitchOut(pokemon) {
 			if ( pokemon.transformed) return;
-			
-				const species: Species =pokemon.species;
-				species.baseStats.atk=160;
-				species.baseStats.def=97;
-				species.baseStats.spa=119;
-				species.baseStats.spd=97;
-				species.baseStats.spe=100;
+			    const species: Species =this.dex.species.get("kricketunehero");
+				// const species: Species =this.dex.deepClone(pokemon.species);
+				// species.baseStats.atk=160;
+				// species.baseStats.def=97;
+				// species.baseStats.spa=119;
+				// species.baseStats.spd=97;
+				// species.baseStats.spe=100;
 				
 				pokemon.formeChange(species, this.effect, true);
 				pokemon.transformed=true;
@@ -673,6 +673,17 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			this.add('-activate', source, 'ability: trick room');
 		},
 		name: "Jinitaimei",
+		rating: 4,
+		num: 2,
+	},
+	wondercheck: {
+		onStart(source) {
+			this.boost({atk:1},source,source);
+			this.field.addPseudoWeather('trickroom');
+			this.field.setTerrain('psychicterrain');
+			this.add('-activate', source, 'ability: trick room');
+		},
+		name: "Wonder Check",
 		rating: 4,
 		num: 2,
 	},

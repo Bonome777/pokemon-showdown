@@ -149,6 +149,51 @@ function setMoveName(pokemon:Pokemon,name:string){
 		virtual: true,
 	})
 }
+function getPromote(battle:Battle,oldpoke:PokemonSet){
+	let newpoke=undefined
+	switch (Dex.toID(oldpoke.species)) {
+		case 'caterpie': newpoke = Teams.unpack(unpack(PokemonPool.Rayquaza, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'fearow':
+		case 'spearow': newpoke = Teams.unpack(unpack(PokemonPool["Ho-Oh"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'pelipper':
+		case 'wingull': newpoke = Teams.unpack(unpack(PokemonPool.Lugia, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'mew': newpoke = Teams.unpack(unpack(PokemonPool.Mewtwo, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'wailord':
+		case 'wailmer': newpoke = Teams.unpack(unpack(PokemonPool.Kyogre, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'torkoal': newpoke = Teams.unpack(unpack(PokemonPool.Groudon, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'duraludon': newpoke = Teams.unpack(unpack(PokemonPool.Dialga, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'dreepy':
+		case 'drakloak':
+		case 'dragapult': newpoke = Teams.unpack(unpack(PokemonPool.Giratina, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'kingdra':
+		case 'seadra': newpoke = Teams.unpack(unpack(PokemonPool.Palkia, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'mandibuzz':
+		case 'vullaby': newpoke = Teams.unpack(unpack(PokemonPool.Yveltal, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'deerling':
+		case 'sawsbuck': newpoke = Teams.unpack(unpack(PokemonPool.Xerneas, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'dragalge': newpoke = Teams.unpack(unpack(PokemonPool.Eternatus, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'glastrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Ice"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'spectrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Shadow"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'herdier':
+		case 'Lillipup':
+		case 'stoutland': newpoke = Teams.unpack(unpack(PokemonPool.Zacian, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'arcanine':
+		case 'growlithe': newpoke = Teams.unpack(unpack(PokemonPool.Zamazenta, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'zygarde10': newpoke = Teams.unpack(unpack(PokemonPool.Zygarde, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'Shinx':
+		case 'Luxio':
+		case 'Luxray': newpoke = Teams.unpack(unpack(PokemonPool.Reshiram, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'necrozma': newpoke = battle.random(2) === 1 ? Teams.unpack(unpack(PokemonPool["Necrozma-Dawn-Wings"], battle.prng, oldpoke.level, oldpoke.evs))![0] : Teams.unpack(unpack(PokemonPool["Necrozma-Dusk-Mane"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'druddigon': newpoke = Teams.unpack(unpack(PokemonPool.Zekrom, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'lapras': newpoke = Teams.unpack(unpack(PokemonPool.Kyurem, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'electivire':
+		case 'electabuzz': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-Black"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'altaria':
+		case 'swablu': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-White"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+	
+	}
+	return newpoke
+}
 export function sample<T>(items: T[], number: number, prng: PRNG = new PRNG(), otheritems:T[]=[]):T[] {
 	if (items.length === 0) {
 		return [];
@@ -11428,44 +11473,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			let oldpoke = pokemon.side.team[0];
-			let newpoke = undefined;
-			switch (this.toID(oldpoke.species)) {
-				case 'caterpie': newpoke = Teams.unpack(unpack(PokemonPool.Rayquaza, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'fearow':
-				case 'spearow': newpoke = Teams.unpack(unpack(PokemonPool["Ho-Oh"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'pelipper':
-				case 'wingull': newpoke = Teams.unpack(unpack(PokemonPool.Lugia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mew': newpoke = Teams.unpack(unpack(PokemonPool.Mewtwo, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'wailord':
-				case 'wailmer': newpoke = Teams.unpack(unpack(PokemonPool.Kyogre, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'torkoal': newpoke = Teams.unpack(unpack(PokemonPool.Groudon, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'duraludon': newpoke = Teams.unpack(unpack(PokemonPool.Dialga, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dreepy':
-				case 'drakloak':
-				case 'dragapult': newpoke = Teams.unpack(unpack(PokemonPool.Giratina, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'kingdra':
-				case 'seadra': newpoke = Teams.unpack(unpack(PokemonPool.Palkia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mandibuzz':
-				case 'vullaby': newpoke = Teams.unpack(unpack(PokemonPool.Yveltal, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'deerling':
-				case 'sawsbuck': newpoke = Teams.unpack(unpack(PokemonPool.Xerneas, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dragalge': newpoke = Teams.unpack(unpack(PokemonPool.Eternatus, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'glastrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Ice"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'spectrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Shadow"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'herdier':
-				case 'stoutland': newpoke = Teams.unpack(unpack(PokemonPool.Zacian, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'arcanine':
-				case 'growlithe': newpoke = Teams.unpack(unpack(PokemonPool.Zamazenta, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'zygarde10': newpoke = Teams.unpack(unpack(PokemonPool.Zygarde, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'charizard': newpoke = Teams.unpack(unpack(PokemonPool.Reshiram, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'necrozma': newpoke = this.random(2) === 1 ? Teams.unpack(unpack(PokemonPool["Necrozma-Dawn-Wings"], this.prng, oldpoke.level, oldpoke.evs))![0] : Teams.unpack(unpack(PokemonPool["Necrozma-Dusk-Mane"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'druddigon': newpoke = Teams.unpack(unpack(PokemonPool.Zekrom, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'lapras': newpoke = Teams.unpack(unpack(PokemonPool.Kyurem, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'electivire':
-				case 'electabuzz': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-Black"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'altaria':
-				case 'swablu': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-White"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-			}
+			let newpoke = getPromote(this,oldpoke);
 			if (newpoke) {
 				pokemon.side.team[0] = newpoke
 				this.add('html', `<div class="broadcast-green"><strong>your ${oldpoke.name} promote to ${newpoke.name} Miraculously</strong></div>`);
@@ -11496,44 +11504,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			let oldpoke = pokemon.side.team[1];
-			let newpoke = undefined;
-			switch (this.toID(oldpoke.species)) {
-				case 'caterpie': newpoke = Teams.unpack(unpack(PokemonPool.Rayquaza, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'fearow':
-				case 'spearow': newpoke = Teams.unpack(unpack(PokemonPool["Ho-Oh"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'pelipper':
-				case 'wingull': newpoke = Teams.unpack(unpack(PokemonPool.Lugia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mew': newpoke = Teams.unpack(unpack(PokemonPool.Mewtwo, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'wailord':
-				case 'wailmer': newpoke = Teams.unpack(unpack(PokemonPool.Kyogre, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'torkoal': newpoke = Teams.unpack(unpack(PokemonPool.Groudon, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'duraludon': newpoke = Teams.unpack(unpack(PokemonPool.Dialga, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dreepy':
-				case 'drakloak':
-				case 'dragapult': newpoke = Teams.unpack(unpack(PokemonPool.Giratina, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'kingdra':
-				case 'seadra': newpoke = Teams.unpack(unpack(PokemonPool.Palkia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mandibuzz':
-				case 'vullaby': newpoke = Teams.unpack(unpack(PokemonPool.Yveltal, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'deerling':
-				case 'sawsbuck': newpoke = Teams.unpack(unpack(PokemonPool.Xerneas, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dragalge': newpoke = Teams.unpack(unpack(PokemonPool.Eternatus, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'glastrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Ice"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'spectrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Shadow"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'herdier':
-				case 'stoutland': newpoke = Teams.unpack(unpack(PokemonPool.Zacian, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'arcanine':
-				case 'growlithe': newpoke = Teams.unpack(unpack(PokemonPool.Zamazenta, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'zygarde10': newpoke = Teams.unpack(unpack(PokemonPool.Zygarde, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'charizard': newpoke = Teams.unpack(unpack(PokemonPool.Reshiram, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'necrozma': newpoke = this.random(2) === 1 ? Teams.unpack(unpack(PokemonPool["Necrozma-Dawn-Wings"], this.prng, oldpoke.level, oldpoke.evs))![0] : Teams.unpack(unpack(PokemonPool["Necrozma-Dusk-Mane"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'druddigon': newpoke = Teams.unpack(unpack(PokemonPool.Zekrom, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'lapras': newpoke = Teams.unpack(unpack(PokemonPool.Kyurem, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'electivire':
-				case 'electabuzz': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-Black"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'altaria':
-				case 'swablu': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-White"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-			}
+			let newpoke = getPromote(this,oldpoke);
 			if (newpoke) {
 				pokemon.side.team[1] = newpoke
 				this.add('html', `<div class="broadcast-green"><strong>your ${oldpoke.name} promote to ${newpoke.name} Miraculously</strong></div>`);
@@ -11564,44 +11535,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			let oldpoke = pokemon.side.team[2];
-			let newpoke = undefined;
-			switch (this.toID(oldpoke.species)) {
-				case 'caterpie': newpoke = Teams.unpack(unpack(PokemonPool.Rayquaza, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'fearow':
-				case 'spearow': newpoke = Teams.unpack(unpack(PokemonPool["Ho-Oh"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'pelipper':
-				case 'wingull': newpoke = Teams.unpack(unpack(PokemonPool.Lugia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mew': newpoke = Teams.unpack(unpack(PokemonPool.Mewtwo, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'wailord':
-				case 'wailmer': newpoke = Teams.unpack(unpack(PokemonPool.Kyogre, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'torkoal': newpoke = Teams.unpack(unpack(PokemonPool.Groudon, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'duraludon': newpoke = Teams.unpack(unpack(PokemonPool.Dialga, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dreepy':
-				case 'drakloak':
-				case 'dragapult': newpoke = Teams.unpack(unpack(PokemonPool.Giratina, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'kingdra':
-				case 'seadra': newpoke = Teams.unpack(unpack(PokemonPool.Palkia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mandibuzz':
-				case 'vullaby': newpoke = Teams.unpack(unpack(PokemonPool.Yveltal, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'deerling':
-				case 'sawsbuck': newpoke = Teams.unpack(unpack(PokemonPool.Xerneas, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dragalge': newpoke = Teams.unpack(unpack(PokemonPool.Eternatus, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'glastrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Ice"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'spectrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Shadow"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'herdier':
-				case 'stoutland': newpoke = Teams.unpack(unpack(PokemonPool.Zacian, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'arcanine':
-				case 'growlithe': newpoke = Teams.unpack(unpack(PokemonPool.Zamazenta, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'zygarde10': newpoke = Teams.unpack(unpack(PokemonPool.Zygarde, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'charizard': newpoke = Teams.unpack(unpack(PokemonPool.Reshiram, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'necrozma': newpoke = this.random(2) === 1 ? Teams.unpack(unpack(PokemonPool["Necrozma-Dawn-Wings"], this.prng, oldpoke.level, oldpoke.evs))![0] : Teams.unpack(unpack(PokemonPool["Necrozma-Dusk-Mane"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'druddigon': newpoke = Teams.unpack(unpack(PokemonPool.Zekrom, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'lapras': newpoke = Teams.unpack(unpack(PokemonPool.Kyurem, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'electivire':
-				case 'electabuzz': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-Black"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'altaria':
-				case 'swablu': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-White"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-			}
+			let newpoke = getPromote(this,oldpoke);
 			if (newpoke) {
 				pokemon.side.team[2] = newpoke
 				this.add('html', `<div class="broadcast-green"><strong>your ${oldpoke.name} promote to ${newpoke.name} Miraculously</strong></div>`);
@@ -11632,44 +11566,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			let oldpoke = pokemon.side.team[3];
-			let newpoke = undefined;
-			switch (this.toID(oldpoke.species)) {
-				case 'caterpie': newpoke = Teams.unpack(unpack(PokemonPool.Rayquaza, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'fearow':
-				case 'spearow': newpoke = Teams.unpack(unpack(PokemonPool["Ho-Oh"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'pelipper':
-				case 'wingull': newpoke = Teams.unpack(unpack(PokemonPool.Lugia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mew': newpoke = Teams.unpack(unpack(PokemonPool.Mewtwo, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'wailord':
-				case 'wailmer': newpoke = Teams.unpack(unpack(PokemonPool.Kyogre, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'torkoal': newpoke = Teams.unpack(unpack(PokemonPool.Groudon, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'duraludon': newpoke = Teams.unpack(unpack(PokemonPool.Dialga, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dreepy':
-				case 'drakloak':
-				case 'dragapult': newpoke = Teams.unpack(unpack(PokemonPool.Giratina, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'kingdra':
-				case 'seadra': newpoke = Teams.unpack(unpack(PokemonPool.Palkia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mandibuzz':
-				case 'vullaby': newpoke = Teams.unpack(unpack(PokemonPool.Yveltal, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'deerling':
-				case 'sawsbuck': newpoke = Teams.unpack(unpack(PokemonPool.Xerneas, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dragalge': newpoke = Teams.unpack(unpack(PokemonPool.Eternatus, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'glastrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Ice"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'spectrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Shadow"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'herdier':
-				case 'stoutland': newpoke = Teams.unpack(unpack(PokemonPool.Zacian, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'arcanine':
-				case 'growlithe': newpoke = Teams.unpack(unpack(PokemonPool.Zamazenta, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'zygarde10': newpoke = Teams.unpack(unpack(PokemonPool.Zygarde, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'charizard': newpoke = Teams.unpack(unpack(PokemonPool.Reshiram, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'necrozma': newpoke = this.random(2) === 1 ? Teams.unpack(unpack(PokemonPool["Necrozma-Dawn-Wings"], this.prng, oldpoke.level, oldpoke.evs))![0] : Teams.unpack(unpack(PokemonPool["Necrozma-Dusk-Mane"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'druddigon': newpoke = Teams.unpack(unpack(PokemonPool.Zekrom, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'lapras': newpoke = Teams.unpack(unpack(PokemonPool.Kyurem, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'electivire':
-				case 'electabuzz': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-Black"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'altaria':
-				case 'swablu': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-White"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-			}
+			let newpoke = getPromote(this,oldpoke);
 			if (newpoke) {
 				pokemon.side.team[3] = newpoke
 				this.add('html', `<div class="broadcast-green"><strong>your ${oldpoke.name} promote to ${newpoke.name} Miraculously</strong></div>`);
@@ -11700,44 +11597,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			let oldpoke = pokemon.side.team[4];
-			let newpoke = undefined;
-			switch (this.toID(oldpoke.species)) {
-				case 'caterpie': newpoke = Teams.unpack(unpack(PokemonPool.Rayquaza, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'fearow':
-				case 'spearow': newpoke = Teams.unpack(unpack(PokemonPool["Ho-Oh"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'pelipper':
-				case 'wingull': newpoke = Teams.unpack(unpack(PokemonPool.Lugia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mew': newpoke = Teams.unpack(unpack(PokemonPool.Mewtwo, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'wailord':
-				case 'wailmer': newpoke = Teams.unpack(unpack(PokemonPool.Kyogre, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'torkoal': newpoke = Teams.unpack(unpack(PokemonPool.Groudon, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'duraludon': newpoke = Teams.unpack(unpack(PokemonPool.Dialga, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dreepy':
-				case 'drakloak':
-				case 'dragapult': newpoke = Teams.unpack(unpack(PokemonPool.Giratina, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'kingdra':
-				case 'seadra': newpoke = Teams.unpack(unpack(PokemonPool.Palkia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mandibuzz':
-				case 'vullaby': newpoke = Teams.unpack(unpack(PokemonPool.Yveltal, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'deerling':
-				case 'sawsbuck': newpoke = Teams.unpack(unpack(PokemonPool.Xerneas, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dragalge': newpoke = Teams.unpack(unpack(PokemonPool.Eternatus, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'glastrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Ice"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'spectrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Shadow"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'herdier':
-				case 'stoutland': newpoke = Teams.unpack(unpack(PokemonPool.Zacian, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'arcanine':
-				case 'growlithe': newpoke = Teams.unpack(unpack(PokemonPool.Zamazenta, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'zygarde10': newpoke = Teams.unpack(unpack(PokemonPool.Zygarde, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'charizard': newpoke = Teams.unpack(unpack(PokemonPool.Reshiram, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'necrozma': newpoke = this.random(2) === 1 ? Teams.unpack(unpack(PokemonPool["Necrozma-Dawn-Wings"], this.prng, oldpoke.level, oldpoke.evs))![0] : Teams.unpack(unpack(PokemonPool["Necrozma-Dusk-Mane"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'druddigon': newpoke = Teams.unpack(unpack(PokemonPool.Zekrom, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'lapras': newpoke = Teams.unpack(unpack(PokemonPool.Kyurem, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'electivire':
-				case 'electabuzz': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-Black"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'altaria':
-				case 'swablu': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-White"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-			}
+			let newpoke = getPromote(this,oldpoke);
 			if (newpoke) {
 				pokemon.side.team[4] = newpoke
 				this.add('html', `<div class="broadcast-green"><strong>your ${oldpoke.name} promote to ${newpoke.name} Miraculously</strong></div>`);
@@ -11768,44 +11628,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			let oldpoke = pokemon.side.team[5];
-			let newpoke = undefined;
-			switch (this.toID(oldpoke.species)) {
-				case 'caterpie': newpoke = Teams.unpack(unpack(PokemonPool.Rayquaza, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'fearow':
-				case 'spearow': newpoke = Teams.unpack(unpack(PokemonPool["Ho-Oh"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'pelipper':
-				case 'wingull': newpoke = Teams.unpack(unpack(PokemonPool.Lugia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mew': newpoke = Teams.unpack(unpack(PokemonPool.Mewtwo, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'wailord':
-				case 'wailmer': newpoke = Teams.unpack(unpack(PokemonPool.Kyogre, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'torkoal': newpoke = Teams.unpack(unpack(PokemonPool.Groudon, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'duraludon': newpoke = Teams.unpack(unpack(PokemonPool.Dialga, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dreepy':
-				case 'drakloak':
-				case 'dragapult': newpoke = Teams.unpack(unpack(PokemonPool.Giratina, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'kingdra':
-				case 'seadra': newpoke = Teams.unpack(unpack(PokemonPool.Palkia, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'mandibuzz':
-				case 'vullaby': newpoke = Teams.unpack(unpack(PokemonPool.Yveltal, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'deerling':
-				case 'sawsbuck': newpoke = Teams.unpack(unpack(PokemonPool.Xerneas, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'dragalge': newpoke = Teams.unpack(unpack(PokemonPool.Eternatus, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'glastrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Ice"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'spectrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Shadow"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'herdier':
-				case 'stoutland': newpoke = Teams.unpack(unpack(PokemonPool.Zacian, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'arcanine':
-				case 'growlithe': newpoke = Teams.unpack(unpack(PokemonPool.Zamazenta, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'zygarde10': newpoke = Teams.unpack(unpack(PokemonPool.Zygarde, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'charizard': newpoke = Teams.unpack(unpack(PokemonPool.Reshiram, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'necrozma': newpoke = this.random(2) === 1 ? Teams.unpack(unpack(PokemonPool["Necrozma-Dawn-Wings"], this.prng, oldpoke.level, oldpoke.evs))![0] : Teams.unpack(unpack(PokemonPool["Necrozma-Dusk-Mane"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'druddigon': newpoke = Teams.unpack(unpack(PokemonPool.Zekrom, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'lapras': newpoke = Teams.unpack(unpack(PokemonPool.Kyurem, this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'electivire':
-				case 'electabuzz': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-Black"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-				case 'altaria':
-				case 'swablu': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-White"], this.prng, oldpoke.level, oldpoke.evs))![0]; break
-			}
+			let newpoke = getPromote(this,oldpoke);
 			if (newpoke) {
 				pokemon.side.team[5] = newpoke
 				this.add('html', `<div class="broadcast-green"><strong>your ${oldpoke.name} promote to ${newpoke.name} Miraculously</strong></div>`);
