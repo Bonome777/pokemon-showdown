@@ -198,7 +198,7 @@ async function updateTeamDB(replayUrl: string): Promise<boolean> {
 	}
 	const components = replayUrl.split('/').pop()!.replace('.json', '').split('-');
 	const formatId = /^[0-9]*$/.test(components[1]) ? components[0] : components[1];
-	if (!formatId.endsWith('ou') && !formatId.endsWith('nationaldex')) { // TODO: enlarge the scope
+	if (!formatId || !(formatId.endsWith('ou') || formatId.endsWith('nationaldex'))) { // TODO: enlarge the scope
 		return false;
 	}
 	if (!teamDBs[formatId]) {
@@ -318,31 +318,20 @@ export const commands: Chat.ChatCommands = {
 						const teamInfo = teamDB.getTeamInfo(teamIndex);
 						buf += `<details title="点击查看回放" style="left: 20px; position: relative">`;
 						buf += `<summary>${PetUtils.showTeam(teamDB.retrieveTeamFromCode(teamInfo['teamCode']))}</summary>`;
-						buf += `<table style="border-spacing: 0px;"><tr>`;
-						buf += `<td><table style="border-spacing: 0px;">`;
-						buf += `<tr ${grayStyle}><th>玩家</th></tr>`;
-						replayNum = 0;
+						let replayTable: string[][] = [];
 						teamInfo['players'].forEach(playerInfo => {
 							playerInfo['replays'].forEach((replayUrl, i) => {
-								let playerId = i == 0 ? playerInfo['playerId'] : '&emsp;';
-								buf += `<tr ${(replayNum % 2) ? grayStyle : ''}><th>${playerId}</th></tr>`;
-								replayNum++;
+								const playerId = playerInfo['playerId'];
+								const playerUrl = `https://pokemonshowdown.com/users/${playerId}`;
+								const playerBar = `<a href="${playerUrl}" class="teamdb-player-url">${playerId}</a>`;
+								const readableUrl = replayUrl.replace('.json', '');
+								replayTable.push([
+									i === 0 ? playerBar : '',
+									`<a href="${readableUrl}">${readableUrl}</a>`
+								]);
 							});
 						});
-						buf += `</table></td>`;
-						buf += `<td><table style="border-spacing: 0px;">`;
-						buf += `<tr ${grayStyle}><th>回放链接</th></tr>`;
-						replayNum = 0;
-						teamInfo['players'].forEach(playerInfo => {
-							playerInfo['replays'].forEach(replayUrl => {
-								let readableUrl = escapeHTML(replayUrl.replace('.json', ''));
-								let replayTab = `<a href="${readableUrl}">${readableUrl}</a>`;
-								buf += `<tr ${(replayNum % 2) ? grayStyle : ''}><th>${replayTab}</th></tr>`;
-								replayNum++;
-							});
-						});
-						buf += `</table></td>`;
-						buf += `</tr></table>`;
+						buf += PetUtils.table([], ['玩家PSID', '回放链接'], replayTable, '100%', 'left', 'left', true);
 						buf += `</details>`;
 					});
 				} else {
