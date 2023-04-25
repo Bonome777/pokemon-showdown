@@ -5,7 +5,7 @@ import { PetUtils } from "./ps-china-pet-mode";
 
 const SEARCH_CD = 10000;
 const MAX_UNSAVED_REPLAYS = 100;
-const SAMPLE_TEAM = ['Dragapult', 'Kingambit', 'Volcarona', 'Great Tusk', 'Toxapex', 'Corviknight'];
+const SAMPLE_TEAM = ['Swampert', 'Pelipper', 'Manaphy', 'Ferrothorn', 'Tornadus-Therian', 'Greninja'];
 
 const TEAM_DATABASE_DIR = 'config/ps-china/team-db';
 if (!FS(TEAM_DATABASE_DIR).existsSync()) FS(TEAM_DATABASE_DIR).mkdirpSync();
@@ -46,7 +46,8 @@ class TeamDB {
 			})
 		} else {
 			Dex.forGen(parseInt(formatId[3])).species.all().forEach((species) => {
-				if (['OU', 'UUBL', 'UU', 'RUBL', 'RU'].includes(species.tier)) {
+				const tier = format.id.endsWith('nationaldex') ? species.natDexTier : species.tier;
+				if (['OU', 'UUBL', 'UU', 'RUBL', 'RU'].includes(tier)) {
 					this.pokeIndex[species.id] = pokeNum;
 					pokeNum += 1;
 				}
@@ -219,7 +220,7 @@ export const commands: Chat.ChatCommands = {
 			buf += `${SAMPLE_TEAM.join(' / ')}</textarea>`;
 			buf += `<p>分级: <select name="format">${Object.keys(teamDBs).map(formatId => {
 				const formatName = Dex.formats.get(formatId).name;
-				const extraAttr = `${formatId === 'gen9ou' ? 'selected' : ''}`;
+				const extraAttr = formatId === 'gen7ou' ? 'selected' : '';
 				return `<option ${extraAttr} value="${formatId}">${formatName}</option>`;
 			}).join('')}</select></p>`;
 			buf += `<p>模糊匹配: <input name="s4" type="checkbox" value="+"/>4&emsp;`;
@@ -229,6 +230,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		async update(target, room, user) {
+			// TODO: reindex
 			this.requireRoom();
 			this.checkCan('lockdown');
 			if (!FS(REPLAY_URLS_FILE).existsSync()) {
@@ -266,8 +268,10 @@ export const commands: Chat.ChatCommands = {
 		async search(target, room, user) {
 			this.requireRoom();
 			if (userLastSearch[user.id] && Date.now() - userLastSearch[user.id] < SEARCH_CD) {
-				this.parse('/teamdb guide');
-				return this.errorReply(`您的查询频率过高, 请稍候再来`);
+				if (!['wcop', 'ndwc'].includes(room!.roomid)) {
+					this.parse('/teamdb guide');
+					return this.errorReply(`您的查询频率过高, 请稍候再来`);
+				}
 			}
 			let [formatStr, teamStr, optionStr] = target.split(';');
 			const format = Dex.formats.get(formatStr);
@@ -275,9 +279,12 @@ export const commands: Chat.ChatCommands = {
 				this.parse('/teamdb guide');
 				return this.errorReply(`"${formatStr}" 分级不存在`);
 			}
-			// if (format.id === 'gen9ou' && room!.roomid !== 'wcop') {
-			// 	return this.errorReply('Access denied.');
-			// }
+			if (format.id === 'gen9ou' && room!.roomid !== 'wcop') {
+				return this.errorReply('Access denied.');
+			}
+			if (format.id.includes('nationaldex') && room!.roomid !== 'ndwc') {
+				return this.errorReply('Access denied.');
+			}
 			const teamDB = teamDBs[format.id];
 			if (!teamDB) {
 				this.parse('/teamdb guide');
@@ -291,6 +298,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('请输入6只合法的宝可梦');
 			}
 
+			let replayNum = 0;
+			let grayStyle = 'style="background: lightgray"';
 			let buf = `<p>和 ${PetUtils.showTeam(args)} 相似的队伍:</p>`;
 			const similarTeams = teamDB.findSimilarTeams(teamDB.getTeamCode(args));
 			for (let i = 2; i >= 0; i--) {
@@ -302,21 +311,31 @@ export const commands: Chat.ChatCommands = {
 						const teamInfo = teamDB.getTeamInfo(teamIndex);
 						buf += `<details title="点击查看回放" style="left: 20px; position: relative">`;
 						buf += `<summary>${PetUtils.showTeam(teamDB.retrieveTeamFromCode(teamInfo['teamCode']))}</summary>`;
-						let replayTable: string[][] = [];
+						buf += `<table style="border-spacing: 0px;"><tr>`;
+						buf += `<td><table style="border-spacing: 0px;">`;
+						buf += `<tr ${grayStyle}><th>玩家PSID</th></tr>`;
+						replayNum = 0;
 						teamInfo['players'].forEach(playerInfo => {
-							let scoutUrl = 'https://fulllifegames.com/Tools/ReplayScouter/?';
-							scoutUrl += `name=${playerInfo['playerId']}&tier=&opponent=&`;
-							scoutUrl += `replays=${playerInfo['replays'].map(s => escapeHTML(s.replace('.json', ''))).join('%0D%0A')}`;
-							const playerBar =`<a href="${scoutUrl}">${playerInfo['playerId']}</a>`;
 							playerInfo['replays'].forEach((replayUrl, i) => {
-								const readableUrl = replayUrl.replace('.json', '');
-								replayTable.push([
-									i === 0 ? playerBar : '',
-									`<a href="${readableUrl}">${readableUrl.split('/').pop()}</a>`
-								]);
+								let playerId = i == 0 ? playerInfo['playerId'] : '&emsp;';
+								buf += `<tr ${(replayNum % 2) ? grayStyle : ''}><th>${playerId}</th></tr>`;
+								replayNum++;
 							});
 						});
-						buf += PetUtils.table([], ['玩家PSID', '回放链接'], replayTable, '100%', 'left', 'left', true);
+						buf += `</table></td>`;
+						buf += `<td><table style="border-spacing: 0px;">`;
+						buf += `<tr ${grayStyle}><th>回放链接</th></tr>`;
+						replayNum = 0;
+						teamInfo['players'].forEach(playerInfo => {
+							playerInfo['replays'].forEach(replayUrl => {
+								let readableUrl = escapeHTML(replayUrl.replace('.json', ''));
+								let replayTab = `<a href="${readableUrl}">${readableUrl}</a>`;
+								buf += `<tr ${(replayNum % 2) ? grayStyle : ''}><th>${replayTab}</th></tr>`;
+								replayNum++;
+							});
+						});
+						buf += `</table></td>`;
+						buf += `</tr></table>`;
 						buf += `</details>`;
 					});
 				} else {
@@ -324,6 +343,8 @@ export const commands: Chat.ChatCommands = {
 				}
 				buf += `</details>`;
 			}
+			buf += '<p><a href="https://fulllifegames.com/Tools/ReplayScouter/">Scout</a></p>';
+			buf += PetUtils.button('/teamdb', '返回');
 			user.sendTo(room!.roomid, `|uhtml|teamdb-search|${buf}`);
 			userLastSearch[user.id] = Date.now();
 		}
