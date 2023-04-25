@@ -193,7 +193,14 @@ FS(TEAM_DATABASE_DIR).readdirIfExistsSync().forEach(formatId => {
 });
 
 async function updateTeamDB(replayUrl: string): Promise<boolean> {
-	const formatId = replayUrl.split('-')[1];
+	if (!replayUrl.endsWith('.json')) {
+		replayUrl += '.json';
+	}
+	const components = replayUrl.split('/').pop()!.replace('.json', '').split('-');
+	const formatId = /^[0-9]*$/.test(components[1]) ? components[0] : components[1];
+	if (!formatId.endsWith('ou') && !formatId.endsWith('nationaldex')) { // TODO: enlarge the scope
+		return false;
+	}
 	if (!teamDBs[formatId]) {
 		teamDBs[formatId] = new TeamDB(formatId);
 	}
@@ -240,7 +247,7 @@ export const commands: Chat.ChatCommands = {
 					.readIfExistsSync()
 					.replace(/\r/g, '')
 					.split('\n')
-					.filter(uri => uri.startsWith('https') && uri.endsWith('.json'));
+					.filter(uri => uri.startsWith('https'));
 				FS(FAILED_URLS_FILE).safeWriteSync('');
 				for (let i = 0; i < replayUrls.length; i++) {
 					user.sendTo(room!.roomid, `|uhtml|teamdb-update|Loading ${i} / ${replayUrls.length}`);
@@ -313,7 +320,7 @@ export const commands: Chat.ChatCommands = {
 						buf += `<summary>${PetUtils.showTeam(teamDB.retrieveTeamFromCode(teamInfo['teamCode']))}</summary>`;
 						buf += `<table style="border-spacing: 0px;"><tr>`;
 						buf += `<td><table style="border-spacing: 0px;">`;
-						buf += `<tr ${grayStyle}><th>玩家PSID</th></tr>`;
+						buf += `<tr ${grayStyle}><th>玩家</th></tr>`;
 						replayNum = 0;
 						teamInfo['players'].forEach(playerInfo => {
 							playerInfo['replays'].forEach((replayUrl, i) => {
