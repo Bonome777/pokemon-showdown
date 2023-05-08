@@ -45,7 +45,7 @@ export const PokemonPool = {
 			'Get Adaptive Slate', 'Get Sight Lens', 'Get Gladiator Helmet', 'Get Super Bright Powder', 
 			'Get Super Expert Belt', 'Get Huge Berry', 'Get Wonderful Berry', 'Get Super Scope Lens', 
 			'Get Eject Station', 'Get Satori No Wheelchair', 'Get Consolation Prize','Get Effort Berry',
-			'Get Portable Earth','Get Death Speaker'
+			'Get Portable Earth','Get Death Speaker','Get Giant Clothes'
 		],
 		'itemroom2': [
 			'Get Explosive Arm', 'Get Double-edged Sword', 'Get Flexible Device', 'Get Pain Connector', 
@@ -62,7 +62,7 @@ export const PokemonPool = {
 			'Learn Sacred Sword', 'Learn Blue Flare', 'Learn Dual Ace', 'Learn Grav Apple', 
 			'Learn Precipice Blades', 'Learn Freeze-Dry', 'Learn Gunk Shot', 'Learn Diamond Storm',
 			'Learn Origin Pulse','Learn Dragon Dance', 'Learn Stasis Ward', 'Learn Psychic Sword', 
-			'Learn Backdraft', 'Learn Spring','Learn Revival Blessing','Learn Life Blessing'
+			'Learn Backdraft', 'Learn Spring','Learn Revival Blessing','Learn Life Blessing','Learn Level Wish',
 		],
 		'moveroom2': [
 			'Learn Extreme Speed', 'Learn DoubleIronBash', 'Learn Shell Smash', 'Learn Core Enforcer', 
@@ -88,7 +88,7 @@ export const PokemonPool = {
 			'Gain Sword of Trying', 'Gain Sleight of Hand', 'Gain Tri Force', 'Gain Obscenities', 
 			'Gain Overdrive', 'Gain Time Jewel', 'Gain Fairy Egg', 'Gain Misfortune Mirror', 
 			'Gain Healing Area', 'Gain Trueshot Aura', 'Gain Future Scope', 'Gain Future Camera', 
-			'Gain Status Push', 'Gain Lifestream','Gain Cockatrice Eye','Gain Fall Rise','Gain Order Way Up'
+			'Gain Status Push', 'Gain Lifestream','Gain Cockatrice Eye','Gain Fall Rise','Gain Order Way Up','Gain Exp Of Spring'
 		],
 		'eliteroom2': [
 			'Gain Dragon Thrones', 'Gain Dancing Floor', 'Gain Egg Of Compassion', 'Gain Industrial Plant', 

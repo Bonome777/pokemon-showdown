@@ -670,6 +670,16 @@ export const relicsEffects = {
 		battle.field.addPseudoWeather("orderwayup");
 		battle.add('message', 'Order Way Up start');
 	},
+	'expofspring': (battle: Battle) => {
+		if(battle.random()<=battle.p2.pokemon.length/6){
+			const pokemons=battle.p2.pokemon.filter(x=>x.set.level<110)
+			if(pokemons.length){
+				const pokemon=battle.sample(pokemons);
+				pokemon.set.level+=1;
+				battle.add('message', `${pokemon.name} level up `);
+			}
+		}
+	},
 };
 
 
@@ -929,7 +939,8 @@ export const Rulesets: { [k: string]: ModdedFormatData } = {
 					RougeUtils.updateUserTeam(
 						this.toID(this.p2.name),
 						Teams.pack(this.p2.team.map(x => {
-							x.level = Math.min((1 + nextwave) * 10, 100);
+							//x.level = Math.min((1 + nextwave) * 10, 100);
+							if( nextwave<=9 && x.level<(1 + nextwave) * 10 && x.level<110) x.level+=10;
 							if (x.evs.hp < 252) x.evs.hp += 4;
 							if (x.evs.atk < 252) x.evs.atk += 4;
 							if (x.evs.def < 252) x.evs.def += 4;

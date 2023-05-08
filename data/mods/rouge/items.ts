@@ -637,10 +637,9 @@ export const Items: { [k: string]: ModdedItemData } = {
 		onFractionalPriorityPriority: -2,
 		onFractionalPriority(priority, pokemon) {
 			if (
-				priority <= 0 &&
-				(pokemon.hp <= pokemon.maxhp / 4 )
+				priority <= 0 && pokemon.hp <= pokemon.maxhp / 4 
 			) {
-				
+					this.add('-activate', pokemon, 'item: Custap Element');
 					return 0.1;
 				}
 			
@@ -694,7 +693,7 @@ export const Items: { [k: string]: ModdedItemData } = {
 		},
 		onEat(pokemon) {
 			for(let i in pokemon.set.evs){
-				pokemon.set.evs[i as keyof typeof pokemon.set.evs]=Math.min( pokemon.set.evs[i as keyof typeof pokemon.set.evs]+12,252);
+				pokemon.set.evs[i as keyof typeof pokemon.set.evs]=Math.min( pokemon.set.evs[i as keyof typeof pokemon.set.evs]+16,252);
 			}
 			
 		},
@@ -713,14 +712,20 @@ export const Items: { [k: string]: ModdedItemData } = {
 		num: 210,
 		gen: 4,
 	},
-	deathspeaker: {
-		name: "Death Speaker",
+	giantclothes: {
+		name: "Giant Clothes",
 		spritenum: 86,
 		
-		onHit( target, source, move) {
-			target.addVolatile('Perish Song',source);
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, pokemon) {
+			return this.chainModify(1+pokemon.hp/1000);
+		},
+		onModifySpAPriority: 1,
+		onModifySpA(atk, pokemon) {
+			return this.chainModify(1+pokemon.hp/1000);
 		},
 		num: 210,
 		gen: 4,
 	},
+	
 };

@@ -195,20 +195,20 @@ function getPromote(battle:Battle,oldpoke:PokemonSet){
 	return newpoke
 }
 export function sample<T>(items: T[], number: number, prng: PRNG = new PRNG(), otheritems:T[]=[]):T[] {
-	if (items.length === 0) {
-		return [];
-	}
 	const len = items.length;
 	items = items.concat(otheritems);
 	const len2 = items.length;
+	if (len2 === 0) {
+		return [];
+	}
 	if (number > len2) number = len2;
 	const indexs = new Set<number>();
 	while (indexs.size < number) {
 		if (otheritems && prng.next(2) === 0) {
-			const index = prng.next(len);
+			const index = prng.next(len2);
 			indexs.add(index)
 		} else {
-			const index = prng.next(len2);
+			const index = prng.next(len);
 			indexs.add(index)
 		}
 	}
@@ -415,6 +415,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Super Dragon Dance",
 		pp: 1,
 		priority: 0,
+		noPPBoosts:true,
 		flags: { snatch: 1, dance: 1 },
 		boosts: {
 			atk: 2,
@@ -423,7 +424,6 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		secondary: null,
 		target: "self",
 		type: "Dragon",
-		isZ: true,
 		contestType: "Cool",
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -477,7 +477,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		secondary: null,
 		target: "self",
 		type: "Bug",
-		isZ: true,
+		noPPBoosts:true,
 		contestType: "Cool",
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -665,9 +665,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		isNonstandard: "Past",
 		name: "Starmie Boost",
 		pp: 1,
+		noPPBoosts:true,
 		priority: 0,
 		flags: {},
-		isZ: true,
 		boosts: {
 			atk: 1,
 			def: 1,
@@ -1683,9 +1683,11 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 						relics2.splice(index2, 1); continue;
 					}
 				}
-				relic=sample(relics1, 1, this.prng, relics2)[0].toLowerCase().replace(/[^a-z0-9]+/g, '').slice(4);
+				relic=sample(relics1, 1, this.prng, relics2)[0]
+				
 				if(relic)
 				{
+					relic=relic.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(4);
 					RougeUtils.addRelics(this.toID(this.p2.name),relic);
 					this.add('message','you got the '+relic)
 				}
@@ -1699,6 +1701,47 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		target: "self",
 		type: "Normal",
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
+		contestType: "Beautiful",
+	},
+	levelwish: {
+		num: 361,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Level Wish",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		onTryHit(source) {
+			if (!this.canSwitch(source.side)) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return this.NOT_FAIL;
+			}
+		},
+		selfdestruct: "ifHit",
+		slotCondition: 'levelwish',
+		condition: {
+			onSwap(target) {
+				if (!target.fainted && (target.hp < target.maxhp || target.status)) {
+					target.heal(target.maxhp);
+					target.clearStatus();
+					this.add('-heal', target, target.getHealth, '[from] move: Level Wish');
+					target.side.removeSlotCondition(target, 'levelwish');
+					if(target.set.level<110)
+						target.set.level+=1;
+				}
+			},
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Healing Wish', target);
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
 		contestType: "Beautiful",
 	},
 	//--------shop's  moves
@@ -2446,6 +2489,25 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		},
 		desc: 'random pokemon of your team get Death Speaker',
 		shortDesc: 'random pokemon of your team get Death Speaker',
+	},
+	getgiantclothes: {
+		num: 1002,
+		name: 'Get Giant Clothes',
+		type: 'Normal',
+		accuracy: true,
+		basePower: 0,
+		category: 'Status',
+		pp: 1,
+		isZ: true,
+		priority: -10,
+		target: 'self',
+		flags: {},
+		onHit(pokemon) {
+			selectpokemon(pokemon, ' Get Item');
+
+		},
+		desc: 'random pokemon of your team get Giant Clothes',
+		shortDesc: 'random pokemon of your team get Giant Clothes',
 	},
 	//----------movemoves
 
@@ -3575,6 +3637,25 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 	learndivine: {
 		num: 1000,
 		name: 'Learn Divine',
+		type: 'Normal',
+		accuracy: true,
+		basePower: 0,
+		category: 'Status',
+		pp: 1,
+		isZ: true,
+		priority: -10,
+		target: 'self',
+		flags: {},
+		onHit(pokemon, source, move) {
+			selectpokemon(pokemon, ' Learn Move');
+			setMoveName(pokemon,move.name);
+
+		},
+
+	},
+	learnlevelwish: {
+		num: 1000,
+		name: 'Learn Level Wish',
 		type: 'Normal',
 		accuracy: true,
 		basePower: 0,
@@ -9092,6 +9173,26 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		onHit(pokemon) {
 			RougeUtils.addRelics(this.toID(pokemon.side.name), 'orderwayup');
 			this.add('html', `<div class="broadcast-green"><strong>you get the Order Way Up</strong></div>`);
+			chooseroom(pokemon, this.prng);
+		},
+		desc: '',
+		shortDesc: '',
+	},
+	gainexpofspring: {
+		num: 1002,
+		name: 'Gain Exp Of Spring',
+		type: 'Normal',
+		accuracy: true,
+		basePower: 0,
+		category: 'Status',
+		pp: 1,
+		isZ: true,
+		priority: -10,
+		target: 'self',
+		flags: {},
+		onHit(pokemon) {
+			RougeUtils.addRelics(this.toID(pokemon.side.name), 'expofspring');
+			this.add('html', `<div class="broadcast-green"><strong>you get the Exp Of Spring</strong></div>`);
 			chooseroom(pokemon, this.prng);
 		},
 		desc: '',
