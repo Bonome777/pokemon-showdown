@@ -9198,6 +9198,46 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		desc: '',
 		shortDesc: '',
 	},
+	gainteratypesword: {
+		num: 1002,
+		name: 'Gain Teratype Sword',
+		type: 'Normal',
+		accuracy: true,
+		basePower: 0,
+		category: 'Status',
+		pp: 1,
+		isZ: true,
+		priority: -10,
+		target: 'self',
+		flags: {},
+		onHit(pokemon) {
+			RougeUtils.addRelics(this.toID(pokemon.side.name), 'teratypesword');
+			this.add('html', `<div class="broadcast-green"><strong>you get the Teratype Sword</strong></div>`);
+			chooseroom(pokemon, this.prng);
+		},
+		desc: '',
+		shortDesc: '',
+	},
+	gainteratypeshield: {
+		num: 1002,
+		name: 'Gain Teratype Shield',
+		type: 'Normal',
+		accuracy: true,
+		basePower: 0,
+		category: 'Status',
+		pp: 1,
+		isZ: true,
+		priority: -10,
+		target: 'self',
+		flags: {},
+		onHit(pokemon) {
+			RougeUtils.addRelics(this.toID(pokemon.side.name), 'teratypeshield');
+			this.add('html', `<div class="broadcast-green"><strong>you get the Teratype Shield</strong></div>`);
+			chooseroom(pokemon, this.prng);
+		},
+		desc: '',
+		shortDesc: '',
+	},
 	//------------功能性技能------------
 
 

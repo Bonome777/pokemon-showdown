@@ -680,6 +680,32 @@ export const relicsEffects = {
 			}
 		}
 	},
+	'teratypesword':(battle: Battle) => {
+		for(let pokemon of battle.p2.pokemon){
+			if(!pokemon.canTerastallize){
+				pokemon.teraType=battle.sample(pokemon.moves.map(move => Dex.moves.get(move).type));
+				pokemon.canTerastallize=pokemon.teraType;
+			}
+		}
+	},
+	'teratypeshield':(battle: Battle) => {
+		const types=battle.dex.types.names()
+		for(let pokemon of battle.p2.pokemon){
+			if(!pokemon.canTerastallize){
+				
+				const possibleTypes = [];
+				for (const type of types) {
+					if (pokemon.hasType(type)) continue;
+					const typeCheck = battle.dex.getEffectiveness(type,pokemon);
+					if (typeCheck >0) {
+						possibleTypes.push(type);
+					}
+				}
+				pokemon.teraType=battle.sample(possibleTypes);
+				pokemon.canTerastallize=pokemon.teraType;
+			}
+		}
+	},
 };
 
 

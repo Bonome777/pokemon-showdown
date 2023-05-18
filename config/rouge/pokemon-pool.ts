@@ -88,7 +88,8 @@ export const PokemonPool = {
 			'Gain Sword of Trying', 'Gain Sleight of Hand', 'Gain Tri Force', 'Gain Obscenities', 
 			'Gain Overdrive', 'Gain Time Jewel', 'Gain Fairy Egg', 'Gain Misfortune Mirror', 
 			'Gain Healing Area', 'Gain Trueshot Aura', 'Gain Future Scope', 'Gain Future Camera', 
-			'Gain Status Push', 'Gain Lifestream','Gain Cockatrice Eye','Gain Fall Rise','Gain Order Way Up','Gain Exp Of Spring'
+			'Gain Status Push', 'Gain Lifestream','Gain Cockatrice Eye','Gain Fall Rise','Gain Order Way Up','Gain Exp Of Spring',
+			'Gain Teratype Sword','Gain Teratype Shield'
 		],
 		'eliteroom2': [
 			'Gain Dragon Thrones', 'Gain Dancing Floor', 'Gain Egg Of Compassion', 'Gain Industrial Plant', 
