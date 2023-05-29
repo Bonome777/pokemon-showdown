@@ -1666,15 +1666,15 @@ export class GlobalRoomState {
 			Chat.runHandlers('onBattleStart', player, room);
 		}
 
-		const chinaTeamRooms = [
-			{
-				'roomid': 'wcop',
-				'format': (format: string) => format == 'gen9ou',
-			},
-			{
-				'roomid': 'ndwc',
-				'format': (format: string) => format.includes('nationaldex'),
-			}
+		const chinaTeamRooms: {'roomid': string, 'format': (format: string) => boolean}[] = [
+			// {
+			// 	'roomid': 'wcop',
+			// 	'format': (format: string) => format == 'gen9ou',
+			// },
+			// {
+			// 	'roomid': 'ndwc',
+			// 	'format': (format: string) => format.includes('nationaldex'),
+			// }
 		]
 		chinaTeamRooms.forEach(roomInfo => {
 			if (roomInfo['format'](toID(room.format))) {

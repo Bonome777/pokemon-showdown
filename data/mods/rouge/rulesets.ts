@@ -2,6 +2,7 @@ import { FS } from "../../../lib";
 import { Teams, Pokemon } from "../../../sim";
 import { championreward, sample } from "./moves";
 import { PokemonPool } from "../../../config/rouge/pokemon-pool";
+import RandomTeams from "./random-teams";
 
 
 type rougePassRecord = { 'cave': number[], 'void': number[] };
@@ -9,6 +10,7 @@ type rougeUserProperty = {
 	'rouge'?: string,
 	'rougeinit'?: number,
 	'passrecord'?: rougePassRecord
+	'difficulty'?:number
 };
 
 const USERPATH = 'config/rouge/user-properties';
@@ -319,6 +321,22 @@ export class RougeUtils {
 			return false;
 		}
 	}
+	static setDifficulty(userid: ID, difficulty: number): boolean {
+		let userProperty = this.getUser(userid);
+		if (userProperty) {
+			userProperty['difficulty'] = difficulty;
+			this.saveUser(userid, userProperty);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	static getDifficulty(userid: ID): number | undefined {
+		
+		return this.getUser(userid)?.difficulty ||0;
+	}
+
 }
 
 export const relicsEffects = {
@@ -556,7 +574,7 @@ export const relicsEffects = {
 		battle.add('message', 'Status Push start');
 	},
 	'lifestream': (battle: Battle) => {
-		RougeUtils.addLives(battle.toID(battle.p2.name), 0.25);
+		RougeUtils.addLives(battle.toID(battle.p2.name), 0.2);
 	},
 	'stope': (battle: Battle) => {
 		battle.field.addPseudoWeather("stope");
@@ -765,11 +783,11 @@ export const Rulesets: { [k: string]: ModdedFormatData } = {
 					x = 'gain' + x;
 					let index = reward.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
 					if (index > -1) {
-						reward.splice(index, 1); continue;
+						RandomTeams.fastPop(reward,index); continue;
 					}
 					let index2 = reward2.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
 					if (index2 > -1) {
-						reward2.splice(index2, 1); continue;
+						RandomTeams.fastPop(reward2,index2); continue;
 					}
 				}
 			}
@@ -851,12 +869,23 @@ export const Rulesets: { [k: string]: ModdedFormatData } = {
 						const move = Dex.moves.get(moveid);
 						return move.category === 'Status' || move.pp===1;
 					}
-					const mega = activePoke.canMegaEvo ? 'mega' : '';
+					let event:'mega' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | ''  = activePoke.canMegaEvo ? 'mega' : '';
+					if(!event && this.toID(activePoke.ability)!=='shopman'){
+						// this.add('html',`${this.p1.pokemonLeft}        ${this.p1.team.length}`)
+						//调整极巨化概率的变量
+						let p=this.p1.team.length>2?(this.p1.team.length>5?0:1):2;
+						if(!this.p1.dynamaxUsed&&this.randomChance(1,(this.p1.pokemonLeft-2)*(8-this.p1.team.length)+p)&&!this.p1.isChoiceDone()){
+							activePoke.addVolatile('dynamax');
+							this.p1.dynamaxUsed=true;
+						}
+						else if(activePoke.canTerastallize&&this.randomChance(1,(this.p1.pokemonLeft-2)*(8-this.p1.team.length))&&!activePoke.volatiles['dynamax'])
+							event='terastallize';
+					}
 					const boostlv = eval(Object.values(activePoke.boosts).join('+'));
-					const boostSwicth = boostlv + 13 < this.random(12) + 1;
-					const abilitySwitch = activePoke.hasAbility(['truant', 'normalize']);
+					const boostSwicth = boostlv + 13 < this.random(12) + 1&&!activePoke.volatiles['dynamax'];
+					const abilitySwitch = activePoke.hasAbility(['truant', 'normalize'])&&!activePoke.volatiles['dynamax'];
 					const itemSwitch = activePoke.hasItem(['choicescarf', 'choiceband', 'choicespecs']) &&
-						activePoke.lastMove && !checkImmune(activePoke.lastMove.id);
+						activePoke.lastMove && !checkImmune(activePoke.lastMove.id)&&!activePoke.volatiles['dynamax'];
 					// Switch
 					if (update.forceSwitch || abilitySwitch || itemSwitch || boostSwicth) {
 						const alive = this.p1.pokemon.filter(
@@ -888,11 +917,11 @@ export const Rulesets: { [k: string]: ModdedFormatData } = {
 						}
 					}
 					// Spectral Thief
-					if (!this.p1.isChoiceDone()) {
+					if (!this.p1.isChoiceDone()&&!activePoke.volatiles['dynamax']) {
 						const foeBoost = eval(Object.values(foeActivePoke.boosts).filter(x => x > 0).join('+'));
 						if (!foeActivePoke.hasType('Normal') && foeBoost >= 2) {
 							if (activePoke.hasMove('spectralthief')) {
-								this.p1.chooseMove('spectralthief', 0, mega);
+								this.p1.chooseMove('spectralthief', 0, event);
 							} else {
 								const thief = this.p1.pokemon.find(x => {
 									return !x.fainted && x.hasMove('spectralthief');
@@ -902,13 +931,13 @@ export const Rulesets: { [k: string]: ModdedFormatData } = {
 						}
 					}
 					// Heal
-					if (!this.p1.isChoiceDone()) {
+					if (!this.p1.isChoiceDone()&&!activePoke.volatiles['dynamax']) {
 						const hpRate = activePoke.hp / activePoke.maxhp;
 						const healPress = activePoke.speed > foeActivePoke.speed ? 1 : 2;
 						const healRate = Math.pow(1 - hpRate, 3) + 3 * Math.pow(1 - hpRate, 2) * hpRate * healPress;
 						if (this.prng.randomChance(healRate * 1000, 1000)) {
 							const healingMove = activePoke.moves.find(isHealMove);
-							if (healingMove) this.p1.chooseMove(healingMove, 0, mega);
+							if (healingMove) this.p1.chooseMove(healingMove, 0, event);
 						}
 					}
 					// Other Moves
@@ -917,14 +946,14 @@ export const Rulesets: { [k: string]: ModdedFormatData } = {
 						const movesNotHeal = movesHasPP.filter(move => !isHealMove(move));
 						const movesNotImmune = movesNotHeal.filter(move => checkImmune(move));
 						const movesNotStatus = movesNotImmune.filter(move => !isStatusMove(move));
-						if ((activePoke.boosts.atk >= 6 || activePoke.boosts.spa >= 6 || boostlv >= this.random(12) + 2 || this.field.getPseudoWeather('physicalsuppression')) && movesNotStatus.length > 0) {
-							this.p1.chooseMove(this.sample(movesNotStatus), 0, mega);
+						if ((activePoke.boosts.atk >= 6 || activePoke.boosts.spa >= 6 || boostlv >= this.random(12) + 2 || this.field.getPseudoWeather('physicalsuppression')||activePoke.volatiles['dynamax']) && movesNotStatus.length > 0) {
+							this.p1.chooseMove(this.sample(movesNotStatus), 0, event);
 						}else if (movesNotImmune.length > 0) {
-							this.p1.chooseMove(this.sample(movesNotImmune), 0, mega);
+							this.p1.chooseMove(this.sample(movesNotImmune), 0, event);
 						} else if (movesNotHeal.length) {
-							this.p1.chooseMove(this.sample(movesNotHeal), 0, mega);
+							this.p1.chooseMove(this.sample(movesNotHeal), 0, event);
 						} else if (movesHasPP.length > 0) {
-							this.p1.chooseMove(this.sample(movesHasPP), 0, mega);
+							this.p1.chooseMove(this.sample(movesHasPP), 0, event);
 						}
 					}
 					if (!this.p1.isChoiceDone()) this.p1.autoChoose();
@@ -943,7 +972,7 @@ export const Rulesets: { [k: string]: ModdedFormatData } = {
 					if(x==='finalact') break;
 				}
 			} else if (pokemon.side === this.p1 && this.prng.next(40) === 1 && !this.field.effectiveWeather()) {
-				this.field.setWeather(this.sample(['raindance', 'hail', 'sunnyday', 'sandstorm']));
+				this.field.setWeather(this.sample(['raindance', 'snow', 'sunnyday', 'sandstorm']));
 			}
 		},
 		onSwitchInPriority: 2,
@@ -1003,6 +1032,25 @@ export const Rulesets: { [k: string]: ModdedFormatData } = {
 			// 	this.p1.pokemon = [new Pokemon('Blissey||leftovers|naturalcure|aromatherapy,icebeam,softboiled,calmmind|Bold|,,252,,252,|F|,0,,,,|||', this.p1)];
 			// 	this.p1.pokemonLeft+=1
 			// }
+		},
+	},
+	pschinarougehardmode: {
+		effectType: 'Rule',
+		name: 'PS China Rouge Hard Mode',
+		onBegin() {
+			this.p1.dynamaxUsed=false;
+			for(let pokemon of this.p1.pokemon){
+				if(!pokemon.canTerastallize){
+					pokemon.teraType=this.sample(pokemon.moves.map(move => Dex.moves.get(move).type));
+					pokemon.canTerastallize=pokemon.teraType;
+				}
+			}
+			
+		},
+		onBeforeTurn(pokemon) {
+			if (this.turn === 1 && pokemon.side === this.p1) {
+				this.field.addPseudoWeather('Hard Mode');
+			} 
 		},
 	},
 	standardnatdex:{

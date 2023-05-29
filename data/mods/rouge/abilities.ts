@@ -1,5 +1,6 @@
 import { PokemonPool } from "../../../config/rouge/pokemon-pool";
 import { sample } from "./moves";
+import RandomTeams from "./random-teams";
 import { relicsEffects, RougeUtils } from "./rulesets";
 
 export const Abilities: { [k: string]: ModdedAbilityData } = {
@@ -430,7 +431,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			return priority + 0.5;
 		},
 		onEmergencyExit(target) {
-			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag || (target.side===this.p2&& target.side.pokemonLeft <=7)) return;
+			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag || (target.side===this.p1&& target.side.pokemonLeft <=3)) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
 					active.switchFlag = false;
@@ -446,7 +447,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 	emergencyexit: {
 		inherit: true,
 		onEmergencyExit(target) {
-			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag || (target.side===this.p2&& target.side.pokemonLeft <=7)) return;
+			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag || (target.side===this.p1&& target.side.pokemonLeft <=3)) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
 					active.switchFlag = false;
@@ -1044,7 +1045,9 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 				this.lose(target.side);
 			}
 			else{
-				target.side.team.splice(target.side.team.indexOf(target.set),1)
+				if(target.side.team.includes(target.set) )
+				RandomTeams.fastPop(target.side.team,target.side.team.indexOf(target.set))
+				
 			}
 		},
 		name: "Alpha Bond",
@@ -1070,7 +1073,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 					x = 'gain' + x;
 					let index = allRelics.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
 					if (index > -1) {
-						allRelics.splice(index, 1); 
+						RandomTeams.fastPop(allRelics,index);
 					}
 					
 				}

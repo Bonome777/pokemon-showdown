@@ -2,6 +2,7 @@
 import { PokemonPool } from "../../../config/rouge/pokemon-pool";
 
 import { PRNG, Teams, Dex } from "../../../sim";
+import RandomTeams from "./random-teams";
 import { RougeUtils } from "./rulesets";
 
 const natures = Dex.natures.all().map(x => x.name);
@@ -152,44 +153,44 @@ function setMoveName(pokemon:Pokemon,name:string){
 function getPromote(battle:Battle,oldpoke:PokemonSet){
 	let newpoke=undefined
 	switch (Dex.toID(oldpoke.species)) {
-		case 'caterpie': newpoke = Teams.unpack(unpack(PokemonPool.Rayquaza, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'caterpie': newpoke = Teams.unpack(getRougeSet(PokemonPool.Rayquaza, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'fearow':
-		case 'spearow': newpoke = Teams.unpack(unpack(PokemonPool["Ho-Oh"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'spearow': newpoke = Teams.unpack(getRougeSet(PokemonPool["Ho-Oh"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'pelipper':
-		case 'wingull': newpoke = Teams.unpack(unpack(PokemonPool.Lugia, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'mew': newpoke = Teams.unpack(unpack(PokemonPool.Mewtwo, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'wingull': newpoke = Teams.unpack(getRougeSet(PokemonPool.Lugia, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'mew': newpoke = Teams.unpack(getRougeSet(PokemonPool.Mewtwo, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'wailord':
-		case 'wailmer': newpoke = Teams.unpack(unpack(PokemonPool.Kyogre, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'torkoal': newpoke = Teams.unpack(unpack(PokemonPool.Groudon, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'duraludon': newpoke = Teams.unpack(unpack(PokemonPool.Dialga, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'wailmer': newpoke = Teams.unpack(getRougeSet(PokemonPool.Kyogre, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'torkoal': newpoke = Teams.unpack(getRougeSet(PokemonPool.Groudon, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'duraludon': newpoke = Teams.unpack(getRougeSet(PokemonPool.Dialga, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'dreepy':
 		case 'drakloak':
-		case 'dragapult': newpoke = Teams.unpack(unpack(PokemonPool.Giratina, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'dragapult': newpoke = Teams.unpack(getRougeSet(PokemonPool.Giratina, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'kingdra':
-		case 'seadra': newpoke = Teams.unpack(unpack(PokemonPool.Palkia, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'seadra': newpoke = Teams.unpack(getRougeSet(PokemonPool.Palkia, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'mandibuzz':
-		case 'vullaby': newpoke = Teams.unpack(unpack(PokemonPool.Yveltal, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'vullaby': newpoke = Teams.unpack(getRougeSet(PokemonPool.Yveltal, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'deerling':
-		case 'sawsbuck': newpoke = Teams.unpack(unpack(PokemonPool.Xerneas, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'dragalge': newpoke = Teams.unpack(unpack(PokemonPool.Eternatus, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'glastrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Ice"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'spectrier': newpoke = Teams.unpack(unpack(PokemonPool["Calyrex-Shadow"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'sawsbuck': newpoke = Teams.unpack(getRougeSet(PokemonPool.Xerneas, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'dragalge': newpoke = Teams.unpack(getRougeSet(PokemonPool.Eternatus, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'glastrier': newpoke = Teams.unpack(getRougeSet(PokemonPool["Calyrex-Ice"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'spectrier': newpoke = Teams.unpack(getRougeSet(PokemonPool["Calyrex-Shadow"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'herdier':
 		case 'Lillipup':
-		case 'stoutland': newpoke = Teams.unpack(unpack(PokemonPool.Zacian, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'stoutland': newpoke = Teams.unpack(getRougeSet(PokemonPool.Zacian, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'arcanine':
-		case 'growlithe': newpoke = Teams.unpack(unpack(PokemonPool.Zamazenta, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'zygarde10': newpoke = Teams.unpack(unpack(PokemonPool.Zygarde, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'growlithe': newpoke = Teams.unpack(getRougeSet(PokemonPool.Zamazenta, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'zygarde10': newpoke = Teams.unpack(getRougeSet(PokemonPool.Zygarde, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'Shinx':
 		case 'Luxio':
-		case 'Luxray': newpoke = Teams.unpack(unpack(PokemonPool.Reshiram, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'necrozma': newpoke = battle.random(2) === 1 ? Teams.unpack(unpack(PokemonPool["Necrozma-Dawn-Wings"], battle.prng, oldpoke.level, oldpoke.evs))![0] : Teams.unpack(unpack(PokemonPool["Necrozma-Dusk-Mane"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'druddigon': newpoke = Teams.unpack(unpack(PokemonPool.Zekrom, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'lapras': newpoke = Teams.unpack(unpack(PokemonPool.Kyurem, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'Luxray': newpoke = Teams.unpack(getRougeSet(PokemonPool.Reshiram, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'necrozma': newpoke = battle.random(2) === 1 ? Teams.unpack(getRougeSet(PokemonPool["Necrozma-Dawn-Wings"], battle.prng, oldpoke.level, oldpoke.evs))![0] : Teams.unpack(getRougeSet(PokemonPool["Necrozma-Dusk-Mane"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'druddigon': newpoke = Teams.unpack(getRougeSet(PokemonPool.Zekrom, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'lapras': newpoke = Teams.unpack(getRougeSet(PokemonPool.Kyurem, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'electivire':
-		case 'electabuzz': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-Black"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'electabuzz': newpoke = Teams.unpack(getRougeSet(PokemonPool["Kyurem-Black"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'altaria':
-		case 'swablu': newpoke = Teams.unpack(unpack(PokemonPool["Kyurem-White"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'swablu': newpoke = Teams.unpack(getRougeSet(PokemonPool["Kyurem-White"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 	
 	}
 	return newpoke
@@ -218,29 +219,43 @@ export function sample<T>(items: T[], number: number, prng: PRNG = new PRNG(), o
 	}
 	return newitems;
 }
-export function unpack(pokeset: any | any[], prng: PRNG = new PRNG(), level?: number, evs?: StatsTable) {
+export function getRougeSet(pokeset: any | any[], prng: PRNG = new PRNG(), level?: number, evs?: StatsTable) {
 	let buf = '';
 	
 	if (!Array.isArray(pokeset))
 		pokeset = [pokeset];
-	
+
+	const randomTeams=new RandomTeams('gen9rougemod',prng)
 	for (const set of pokeset) {
 		if (buf) buf += ']';
 		// name
 		buf += (set.name || set.species);
-
+		
 		// species
 		const id = Dex.toID(set.species || set.name);
+		const species=Dex.species.get(id);
 		buf += '|' + (Dex.toID(set.name || set.species) === id ? '' : id);
-
+		
+		
 		// item
-		buf += '|' + (Array.isArray(set.item) ? prng.sample(set.item) : set.item);
+		const item=Array.isArray(set.item) ? prng.sample(set.item) : set.item
+		buf += '|' + item;
 
 		// ability
+		const abilities=(Array.isArray(set.ability) ? set.ability : [set.ability]);
+		let ability:string=''
+		if(['flameorb','toxicorb'].includes(Dex.toID(item))&&abilities.includes('Guts')) ability='Guts';
+		if(item=='Toxic Orb'&&abilities.includes('Poison Heal'))ability='Poison Heal';
+		if(item=='Life Orb'&&abilities.includes('Sheer Force'))ability='Sheer Force';
+		if(abilities.includes('Sniper')){
+			if(item=='Scope Lens')ability='Sniper';
+			else ability=prng.sample(abilities.filter((x: string)=>x!=='Sniper'))
+		}
+		if(!ability) ability=prng.sample(abilities);
 		buf += '|' + (Array.isArray(set.ability) ? prng.sample(set.ability) : set.ability);
-
 		// moves
-		buf += '|' + sample(set.moves, 4, prng).join(',');
+		const moves=Array.from(randomTeams.randomMoveset(species.types,new Set(abilities),{},species,false,false,set.moves.map((x: any)=>Dex.toID(x)),species.types[0],item))
+		buf += '|' + moves.join(',');
 
 		// nature
 		if (set.nature)
@@ -1676,11 +1691,11 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					x = 'gain' + x;
 					let index = relics1.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
 					if (index > -1) {
-						relics1.splice(index, 1); continue;
+						RandomTeams.fastPop(relics1,index); continue;
 					}
 					let index2 = relics2.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
 					if (index2 > -1) {
-						relics2.splice(index2, 1); continue;
+						RandomTeams.fastPop(relics2,index2); continue;
 					}
 				}
 				relic=sample(relics1, 1, this.prng, relics2)[0]
@@ -1744,6 +1759,165 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
+	bugpunch: {
+		num: 857,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Bug Punch",
+		pp: 15,
+		priority: 1,
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
+		secondary: null,
+		hasSheerForce: true,
+		target: "normal",
+		type: "Bug",
+		contestType: "Cool",
+	},
+	
+	lifeblessing: {
+		num: 349,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Life Blessing",
+		pp: 1,
+		noPPBoosts:true,
+		priority: 0,
+		flags: {},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		zMove: {effect: 'clearnegativeboost'},
+		contestType: "Cool",
+		self: {
+			volatileStatus: 'mustrecharge',
+		},
+		onHit(target, source, move) {
+			RougeUtils.addLives(this.toID(target.side.name))
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Revival Blessing', target);
+		},
+	},
+	divine: {
+		num: 601,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		isNonstandard: "Past",
+		name: "Divine",
+		pp: 10,
+		priority: 0,
+		flags: {charge: 1, nonsky: 1},
+		onTryMove(attacker, defender, move) {
+			this.attrLastMove('[still]');
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		onHit(target, source, move) {
+			if(target.side===this.p2){
+				let relic='';
+				let relics1 =  PokemonPool.Shop.eliteroom.concat();
+				let relics2 =  PokemonPool.Shop.eliteroom2.concat();
+				for (let i of RougeUtils.unlock.index.eliteroom) {
+					relics1.push(RougeUtils.unlock.voidBody[i])
+				}
+				for (let i of RougeUtils.unlock.index.eliteroom2) {
+					relics2.push(RougeUtils.unlock.voidBody[i])
+				}
+				let relics = RougeUtils.getRelics(this.toID(this.p2.name));
+				for (let x of relics) {
+					x = 'gain' + x;
+					let index = relics1.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
+					if (index > -1) {
+						relics1.splice(index, 1); continue;
+					}
+					let index2 = relics2.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
+					if (index2 > -1) {
+						relics2.splice(index2, 1); continue;
+					}
+				}
+<<<<<<< HEAD
+				relic=sample(relics1, 1, this.prng, relics2)[0]
+				
+				if(relic)
+				{
+					relic=relic.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(4);
+=======
+				relic=sample(relics1, 1, this.prng, relics2)[0].toLowerCase().replace(/[^a-z0-9]+/g, '').slice(4);
+				if(relic)
+				{
+>>>>>>> 67f589f30 (Rouge Mode 1.3.1 - 1.3.2; Update PS-China Utils)
+					RougeUtils.addRelics(this.toID(this.p2.name),relic);
+					this.add('message','you got the '+relic)
+				}
+			}
+		},
+		
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Geomancy', target);
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
+		contestType: "Beautiful",
+	},
+<<<<<<< HEAD
+	levelwish: {
+		num: 361,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Level Wish",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		onTryHit(source) {
+			if (!this.canSwitch(source.side)) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return this.NOT_FAIL;
+			}
+		},
+		selfdestruct: "ifHit",
+		slotCondition: 'levelwish',
+		condition: {
+			onSwap(target) {
+				if (!target.fainted && (target.hp < target.maxhp || target.status)) {
+					target.heal(target.maxhp);
+					target.clearStatus();
+					this.add('-heal', target, target.getHealth, '[from] move: Level Wish');
+					target.side.removeSlotCondition(target, 'levelwish');
+					if(target.set.level<110)
+						target.set.level+=1;
+				}
+			},
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Healing Wish', target);
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+		contestType: "Beautiful",
+	},
+=======
+>>>>>>> 67f589f30 (Rouge Mode 1.3.1 - 1.3.2; Update PS-China Utils)
 	//--------shop's  moves
 	getsuperband: {
 		num: 1000,
@@ -2508,6 +2682,25 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		},
 		desc: 'random pokemon of your team get Giant Clothes',
 		shortDesc: 'random pokemon of your team get Giant Clothes',
+	},
+	getdamagesimplification: {
+		num: 1002,
+		name: 'Get Damage Simplification',
+		type: 'Normal',
+		accuracy: true,
+		basePower: 0,
+		category: 'Status',
+		pp: 1,
+		isZ: true,
+		priority: -10,
+		target: 'self',
+		flags: {},
+		onHit(pokemon) {
+			selectpokemon(pokemon, ' Get Item');
+
+		},
+		desc: 'random pokemon of your team get Damage Simplification',
+		shortDesc: 'random pokemon of your team get Damage Simplification',
 	},
 	//----------movemoves
 
@@ -4173,7 +4366,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Munchlax, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Munchlax, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Munchlax has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4198,7 +4391,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Tauros, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Tauros, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Tauros has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4222,7 +4415,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Ferroseed, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Ferroseed, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Ferroseed has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4246,7 +4439,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Thundurus, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Thundurus, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Thundurus has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4270,7 +4463,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Mawile, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Mawile, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Mawile has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4294,7 +4487,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Growlithe, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Growlithe, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Growlithe has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4318,7 +4511,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Slowbro, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Slowbro, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Slowbro has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4342,7 +4535,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Lapras, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Lapras, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Lapras has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4366,7 +4559,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Dreepy, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Dreepy, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Dreepy has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4390,7 +4583,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Angod, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Angod, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Angod has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4414,7 +4607,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Beldum, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Beldum, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Beldum has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4438,7 +4631,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Onix, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Onix, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Onix has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4462,7 +4655,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Slakoth, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Slakoth, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Slakoth has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4486,7 +4679,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Solosis, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Solosis, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Solosis has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4510,7 +4703,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Tapu Bulu"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Tapu Bulu"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Tapu Bulu has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4534,7 +4727,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Indeedee, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Indeedee, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Indeedee has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4558,7 +4751,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Pincurchin, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Pincurchin, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Pincurchin has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4582,7 +4775,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Tapu Fini"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Tapu Fini"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Tapu Fini has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4606,7 +4799,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Yanma, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Yanma, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Yanma has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4630,7 +4823,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Pinsir, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Pinsir, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Pinsir has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4654,7 +4847,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Sneasel, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Sneasel, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Sneasel has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4678,7 +4871,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Houndour, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Houndour, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Houndour has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4702,7 +4895,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Seadra, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Seadra, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Seadra has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4726,7 +4919,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Shinx, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Shinx, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Shinx has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4750,7 +4943,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Riolu, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Riolu, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Riolu has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4774,7 +4967,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Virizion, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Virizion, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Virizion has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4798,7 +4991,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Fletchinder, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Fletchinder, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Fletchinder has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4822,7 +5015,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Roselia, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Roselia, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Roselia has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4846,7 +5039,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Nidoking, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Nidoking, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Nidoking has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4870,7 +5063,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Nidoqueen, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Nidoqueen, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Nidoqueen has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4894,7 +5087,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Larvitar, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Larvitar, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Larvitar has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4918,7 +5111,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Diancie, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Diancie, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Diancie has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4942,7 +5135,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Golisopod, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Golisopod, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Golisopod has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4966,7 +5159,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Gastly, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Gastly, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Gastly has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -4990,7 +5183,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Dhelmise, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Dhelmise, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Dhelmise has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5014,7 +5207,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Slowpoke, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Slowpoke, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Slowpoke has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5038,7 +5231,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Larvesta, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Larvesta, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Larvesta has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5062,7 +5255,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Skarmory, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Skarmory, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Skarmory has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5086,7 +5279,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Torkoal, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Torkoal, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Torkoal has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5110,7 +5303,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Spearow, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Spearow, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Spearow has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5134,7 +5327,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Absol, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Absol, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Absol has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5158,7 +5351,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Clefairy, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Clefairy, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Clefairy has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5182,7 +5375,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Tyrunt, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Tyrunt, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Tyrunt has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5206,7 +5399,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Drilbur, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Drilbur, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Drilbur has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5230,7 +5423,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Shellder, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Shellder, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Shellder has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5254,7 +5447,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Heracross, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Heracross, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Heracross has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5278,7 +5471,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Shuckle-Mega"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Shuckle-Mega"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Shuckle-Mega has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5302,7 +5495,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Tapu Koko"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Tapu Koko"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Tapu Koko has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5326,7 +5519,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Tapu Lele"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Tapu Lele"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Tapu Lele has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5350,7 +5543,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Swinub, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Swinub, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Swinub has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5374,7 +5567,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Dugtrio-Alola"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Dugtrio-Alola"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Dugtrio-Alola has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5398,7 +5591,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Silicobra, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Silicobra, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Silicobra has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5422,7 +5615,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Heatran, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Heatran, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Heatran has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5446,7 +5639,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Togepi, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Togepi, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Togepi has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5470,7 +5663,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Vulpix-Alola"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Vulpix-Alola"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Vulpix-Alola has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5494,7 +5687,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Scyther, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Scyther, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Scyther has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5518,7 +5711,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Krabby, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Krabby, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Krabby has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5542,7 +5735,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Binacle, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Binacle, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Binacle has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5566,7 +5759,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Shuppet, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Shuppet, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Shuppet has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5590,7 +5783,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Druddigon, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Druddigon, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Druddigon has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5614,7 +5807,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Misdreavus, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Misdreavus, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Misdreavus has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5638,7 +5831,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Miracle Singer"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Miracle Singer"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Miracle Singer has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5662,7 +5855,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Ekans, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Ekans, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Ekans has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5686,7 +5879,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Wailmer, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Wailmer, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Wailmer has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5710,7 +5903,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Cosmog, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Cosmog, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Cosmog has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5734,7 +5927,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Hammer, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Hammer, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>hammer has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5758,7 +5951,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Emzzf, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Emzzf, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>emzzf has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5782,7 +5975,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Psyduck, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Psyduck, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Psyduck has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5806,7 +5999,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Flygon-mega"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Flygon-mega"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Flygon-mega has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5830,7 +6023,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Zygarde-10%"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Zygarde-10%"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Zygarde-10% has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5854,7 +6047,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["White Devil"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["White Devil"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>White Devil has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5878,7 +6071,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Gible, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Gible, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Gible has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5902,7 +6095,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Arctovish, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Arctovish, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Arctovish has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5926,7 +6119,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Glastrier, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Glastrier, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Glastrier has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5950,7 +6143,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Nihilego, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Nihilego, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Nihilego has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5974,7 +6167,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Meloetta-Pirouette"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Meloetta-Pirouette"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Meloetta-Pirouette has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -5998,7 +6191,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Legend-Unown"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Legend-Unown"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Legend-Unown has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6022,7 +6215,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Blacephalon, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Blacephalon, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Blacephalon has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6046,7 +6239,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Swablu, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Swablu, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Swablu has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6070,7 +6263,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Urshifu, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Urshifu, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Urshifu has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6094,7 +6287,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Arctozolt, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Arctozolt, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Arctozolt has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6118,7 +6311,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Beedrill, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Beedrill, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Beedrill has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6142,7 +6335,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Shroomish, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Shroomish, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Shroomish has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6166,7 +6359,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Cubone, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Cubone, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Cubone has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6190,7 +6383,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Zarude, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Zarude, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Zarude has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6214,7 +6407,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Dratini, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Dratini, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Dratini has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6238,7 +6431,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Yungoos, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Yungoos, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Yungoos has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6262,7 +6455,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Ralts, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Ralts, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Ralts has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6286,7 +6479,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Melmetal, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Melmetal, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Melmetal has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6310,7 +6503,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Silvally, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Silvally, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Silvally has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6334,7 +6527,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Latios, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Latios, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Latios has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6358,7 +6551,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Latias, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Latias, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Latias has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6382,7 +6575,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Slowpoke-Galar"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Slowpoke-Galar"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Slowpoke-Galar has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6406,7 +6599,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Hoopa-Unbound"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Hoopa-Unbound"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Hoopa-Unbound has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6430,7 +6623,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Hoopa, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Hoopa, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Hoopa has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6454,7 +6647,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Genesect, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Genesect, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Genesect has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6478,7 +6671,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Regigigas, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Regigigas, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Regigigas has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6502,7 +6695,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Escavalier, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Escavalier, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Escavalier has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6526,7 +6719,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Kangaskhan, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Kangaskhan, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Kangaskhan has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6550,7 +6743,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Duraludon, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Duraludon, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Duraludon has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6574,7 +6767,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Wingull, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Wingull, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Wingull has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6598,7 +6791,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Electabuzz, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Electabuzz, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Electabuzz has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6622,7 +6815,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Necrozma, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Necrozma, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Necrozma has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6646,7 +6839,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Skrelp, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Skrelp, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Skrelp has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6670,7 +6863,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Vullaby, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Vullaby, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Vullaby has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6694,7 +6887,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Mew, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Mew, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Mew has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6718,7 +6911,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Deerling, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Deerling, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Deerling has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6742,7 +6935,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Lillipup, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Lillipup, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Lillipup has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6766,7 +6959,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Caterpie, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Caterpie, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Caterpie has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6790,7 +6983,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Iron Moth"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Iron Moth"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Iron Moth has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6814,7 +7007,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Slither Wing"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Slither Wing"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Slither Wing has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6838,7 +7031,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Bellsprout, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Bellsprout, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Bellsprout has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6862,7 +7055,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Mareep, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Mareep, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Mareep has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6886,7 +7079,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Tympole, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Tympole, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Tympole has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6910,7 +7103,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Tentacool, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Tentacool, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Tentacool has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6934,7 +7127,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Scraggy, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Scraggy, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Scraggy has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6958,7 +7151,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Nacli, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Nacli, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Nacli has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -6982,7 +7175,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Mankey, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Mankey, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Mankey has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -7006,7 +7199,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Capsakid, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Capsakid, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Capsakid has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -7030,7 +7223,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Frigibax, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Frigibax, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Frigibax has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -7054,7 +7247,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Tandemaus, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Tandemaus, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Tandemaus has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -7078,7 +7271,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Pawniard, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Pawniard, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Pawniard has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -7102,7 +7295,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Iron Valiant"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Iron Valiant"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Iron Valiant has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -7126,7 +7319,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Terrakion, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Terrakion, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Terrakion has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -7150,7 +7343,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Iron Thorns"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Iron Thorns"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Iron Thorns has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -7174,7 +7367,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool["Roaring Moon"], this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool["Roaring Moon"], this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Roaring Moon has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -7198,7 +7391,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Tinkatink, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Tinkatink, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Tinkatink has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -7222,7 +7415,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length < 6) {
-				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(unpack(PokemonPool.Kricketune, this.prng, pokemon.side.team[0].level))!);
+				pokemon.side.team = pokemon.side.team.concat(Teams.unpack(getRougeSet(PokemonPool.Kricketune, this.prng, pokemon.side.team[0].level))!);
 				this.add('html', `<div class="broadcast-green"><strong>Kricketune has joined in your team</strong></div>`);
 				chooseroom(pokemon, this.prng);
 			} else {
@@ -9292,11 +9485,11 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					x = 'gain' + x;
 					let index = reward.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
 					if (index > -1) {
-						reward.splice(index, 1); continue;
+						RandomTeams.fastPop(reward,index); continue;
 					}
 					let index2 = reward2.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
 					if (index2 > -1) {
-						reward2.splice(index2, 1); continue;
+						RandomTeams.fastPop(reward2,index2); continue;
 					}
 
 				}
@@ -9754,7 +9947,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {},
 		onHit(pokemon) {
 			if (pokemon.side.team.length > 0) {
-				let a = pokemon.side.team.splice(0,1);
+				let a =  pokemon.side.team.splice(0,1);
 				this.add('html', `<div class="broadcast-green"><strong>your ${a[0].name} has deleted</strong></div>`);
 			}
 			chooseroom(pokemon, this.prng);
@@ -11805,7 +11998,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				if (!RougeUtils.initMonsAndEvos.includes(target.name)) {
 					let replace = lastmove.replace('Get', '').trim() as keyof typeof PokemonPool;
 					if (PokemonPool[replace]) {
-						pokemon.side.team[0] = Teams.unpack(unpack(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
+						pokemon.side.team[0] = Teams.unpack(getRougeSet(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
 						this.add('html', `<div class="broadcast-green"><strong>your ${target.name} has replaced ${replace}</strong></div>`);
 						chooseroom(pokemon, this.prng);
 					} else {
@@ -11841,7 +12034,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				if (!RougeUtils.initMonsAndEvos.includes(target.name)) {
 					let replace = lastmove.replace('Get', '').trim() as keyof typeof PokemonPool;
 					if (PokemonPool[replace]) {
-						pokemon.side.team[1] = Teams.unpack(unpack(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
+						pokemon.side.team[1] = Teams.unpack(getRougeSet(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
 						this.add('html', `<div class="broadcast-green"><strong>your ${target.name} has replaced ${replace}</strong></div>`);
 						chooseroom(pokemon, this.prng);
 					} else {
@@ -11877,7 +12070,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				if (!RougeUtils.initMonsAndEvos.includes(target.name)) {
 					let replace = lastmove.replace('Get', '').trim() as keyof typeof PokemonPool;
 					if (PokemonPool[replace]) {
-						pokemon.side.team[2] = Teams.unpack(unpack(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
+						pokemon.side.team[2] = Teams.unpack(getRougeSet(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
 						this.add('html', `<div class="broadcast-green"><strong>your ${target.name} has replaced ${replace}</strong></div>`);
 						chooseroom(pokemon, this.prng);
 					} else {
@@ -11913,7 +12106,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				if (!RougeUtils.initMonsAndEvos.includes(target.name)) {
 					let replace = lastmove.replace('Get', '').trim() as keyof typeof PokemonPool;
 					if (PokemonPool[replace]) {
-						pokemon.side.team[3] = Teams.unpack(unpack(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
+						pokemon.side.team[3] = Teams.unpack(getRougeSet(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
 						this.add('html', `<div class="broadcast-green"><strong>your ${target.name} has replaced ${replace}</strong></div>`);
 						chooseroom(pokemon, this.prng);
 					} else {
@@ -11949,7 +12142,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				if (!RougeUtils.initMonsAndEvos.includes(target.name)) {
 					let replace = lastmove.replace('Get', '').trim() as keyof typeof PokemonPool;
 					if (PokemonPool[replace]) {
-						pokemon.side.team[4] = Teams.unpack(unpack(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
+						pokemon.side.team[4] = Teams.unpack(getRougeSet(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
 						this.add('html', `<div class="broadcast-green"><strong>your ${target.name} has replaced ${replace}</strong></div>`);
 						chooseroom(pokemon, this.prng);
 					} else {
@@ -11985,7 +12178,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				if (!RougeUtils.initMonsAndEvos.includes(target.name)) {
 					let replace = lastmove.replace('Get', '').trim() as keyof typeof PokemonPool;
 					if (PokemonPool[replace]) {
-						pokemon.side.team[5] = Teams.unpack(unpack(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
+						pokemon.side.team[5] = Teams.unpack(getRougeSet(PokemonPool[replace], this.prng, pokemon.side.team[0].level))![0];
 						this.add('html', `<div class="broadcast-green"><strong>your ${target.name} has replaced ${replace}</strong></div>`);
 						chooseroom(pokemon, this.prng);
 					} else {

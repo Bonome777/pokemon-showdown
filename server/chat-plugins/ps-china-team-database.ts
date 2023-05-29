@@ -286,12 +286,12 @@ export const commands: Chat.ChatCommands = {
 				this.parse('/teamdb guide');
 				return this.errorReply(`"${formatStr}" 分级不存在`);
 			}
-			if (format.id === 'gen9ou' && room!.roomid !== 'wcop') {
-				return this.errorReply('Access denied.');
-			}
-			if (format.id.includes('nationaldex') && room!.roomid !== 'ndwc') {
-				return this.errorReply('Access denied.');
-			}
+			// if (format.id === 'gen9ou' && room!.roomid !== 'wcop') {
+			// 	return this.errorReply('Access denied.');
+			// }
+			// if (format.id.includes('nationaldex') && room!.roomid !== 'ndwc') {
+			// 	return this.errorReply('Access denied.');
+			// }
 			const teamDB = teamDBs[format.id];
 			if (!teamDB) {
 				this.parse('/teamdb guide');
