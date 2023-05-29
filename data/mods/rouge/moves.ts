@@ -1607,116 +1607,6 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				move.category = 'Physical';
 			}
 		},
-	
-	},
-	bugpunch: {
-		num: 857,
-		accuracy: 100,
-		basePower: 60,
-		category: "Physical",
-		name: "Bug Punch",
-		pp: 15,
-		priority: 1,
-		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		secondary: null,
-		hasSheerForce: true,
-		target: "normal",
-		type: "Bug",
-		contestType: "Cool",
-	},
-	
-	lifeblessing: {
-		num: 349,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Life Blessing",
-		pp: 1,
-		noPPBoosts:true,
-		priority: 0,
-		flags: {},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-		zMove: {effect: 'clearnegativeboost'},
-		contestType: "Cool",
-		self: {
-			volatileStatus: 'mustrecharge',
-		},
-		onHit(target, source, move) {
-			RougeUtils.addLives(this.toID(target.side.name))
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Revival Blessing', target);
-		},
-	},
-	divine: {
-		num: 601,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		isNonstandard: "Past",
-		name: "Divine",
-		pp: 10,
-		priority: 0,
-		flags: {charge: 1, nonsky: 1},
-		onTryMove(attacker, defender, move) {
-			this.attrLastMove('[still]');
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
-		},
-		onHit(target, source, move) {
-			if(target.side===this.p2){
-				let relic='';
-				let relics1 =  PokemonPool.Shop.eliteroom.concat();
-				let relics2 =  PokemonPool.Shop.eliteroom2.concat();
-				for (let i of RougeUtils.unlock.index.eliteroom) {
-					relics1.push(RougeUtils.unlock.voidBody[i])
-				}
-				for (let i of RougeUtils.unlock.index.eliteroom2) {
-					relics2.push(RougeUtils.unlock.voidBody[i])
-				}
-				let relics = RougeUtils.getRelics(this.toID(this.p2.name));
-				for (let x of relics) {
-					x = 'gain' + x;
-					let index = relics1.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
-					if (index > -1) {
-						RandomTeams.fastPop(relics1,index); continue;
-					}
-					let index2 = relics2.map(x => x.toLowerCase().replace(/[^a-z0-9]+/g, '')).indexOf(x);
-					if (index2 > -1) {
-						RandomTeams.fastPop(relics2,index2); continue;
-					}
-				}
-				relic=sample(relics1, 1, this.prng, relics2)[0]
-				
-				if(relic)
-				{
-					relic=relic.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(4);
-					RougeUtils.addRelics(this.toID(this.p2.name),relic);
-					this.add('message','you got the '+relic)
-				}
-			}
-		},
-		
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Geomancy', target);
-		},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
-		contestType: "Beautiful",
 	},
 	levelwish: {
 		num: 361,
@@ -1774,7 +1664,6 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		type: "Bug",
 		contestType: "Cool",
 	},
-	
 	lifeblessing: {
 		num: 349,
 		accuracy: true,
@@ -1848,17 +1737,11 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 						relics2.splice(index2, 1); continue;
 					}
 				}
-<<<<<<< HEAD
 				relic=sample(relics1, 1, this.prng, relics2)[0]
 				
 				if(relic)
 				{
 					relic=relic.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(4);
-=======
-				relic=sample(relics1, 1, this.prng, relics2)[0].toLowerCase().replace(/[^a-z0-9]+/g, '').slice(4);
-				if(relic)
-				{
->>>>>>> 67f589f30 (Rouge Mode 1.3.1 - 1.3.2; Update PS-China Utils)
 					RougeUtils.addRelics(this.toID(this.p2.name),relic);
 					this.add('message','you got the '+relic)
 				}
@@ -1874,50 +1757,6 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Beautiful",
 	},
-<<<<<<< HEAD
-	levelwish: {
-		num: 361,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Level Wish",
-		pp: 10,
-		priority: 0,
-		flags: {snatch: 1, heal: 1},
-		onTryHit(source) {
-			if (!this.canSwitch(source.side)) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return this.NOT_FAIL;
-			}
-		},
-		selfdestruct: "ifHit",
-		slotCondition: 'levelwish',
-		condition: {
-			onSwap(target) {
-				if (!target.fainted && (target.hp < target.maxhp || target.status)) {
-					target.heal(target.maxhp);
-					target.clearStatus();
-					this.add('-heal', target, target.getHealth, '[from] move: Level Wish');
-					target.side.removeSlotCondition(target, 'levelwish');
-					if(target.set.level<110)
-						target.set.level+=1;
-				}
-			},
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Healing Wish', target);
-		},
-		secondary: null,
-		target: "self",
-		type: "Psychic",
-		contestType: "Beautiful",
-	},
-=======
->>>>>>> 67f589f30 (Rouge Mode 1.3.1 - 1.3.2; Update PS-China Utils)
 	//--------shop's  moves
 	getsuperband: {
 		num: 1000,
