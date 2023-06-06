@@ -426,7 +426,7 @@ export class RandomTeams {
 					RandomTeams.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[1]));
 				}
 			}
-			if (unpairedMoves.length === 1) {
+			if (unpairedMoves.length === 1&&movePool.includes(unpairedMoves[0])) {
 				RandomTeams.fastPop(movePool, movePool.indexOf(unpairedMoves[0]));
 			}
 		}
@@ -577,6 +577,7 @@ export class RandomTeams {
 		movePool: string[],
 		teraType: string,
 	): MoveCounter {
+		if(!movePool.includes(move)) return this.queryMoves(moves, species, teraType, abilities);
 		moves.add(move);
 		RandomTeams.fastPop(movePool, movePool.indexOf(move));
 		const counter = this.queryMoves(moves, species, teraType, abilities);

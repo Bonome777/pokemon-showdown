@@ -176,14 +176,14 @@ function getPromote(battle:Battle,oldpoke:PokemonSet){
 		case 'glastrier': newpoke = Teams.unpack(getRougeSet(PokemonPool["Calyrex-Ice"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'spectrier': newpoke = Teams.unpack(getRougeSet(PokemonPool["Calyrex-Shadow"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'herdier':
-		case 'Lillipup':
+		case 'lillipup':
 		case 'stoutland': newpoke = Teams.unpack(getRougeSet(PokemonPool.Zacian, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'arcanine':
 		case 'growlithe': newpoke = Teams.unpack(getRougeSet(PokemonPool.Zamazenta, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'zygarde10': newpoke = Teams.unpack(getRougeSet(PokemonPool.Zygarde, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
-		case 'Shinx':
-		case 'Luxio':
-		case 'Luxray': newpoke = Teams.unpack(getRougeSet(PokemonPool.Reshiram, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
+		case 'shinx':
+		case 'luxio':
+		case 'luxray': newpoke = Teams.unpack(getRougeSet(PokemonPool.Reshiram, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'necrozma': newpoke = battle.random(2) === 1 ? Teams.unpack(getRougeSet(PokemonPool["Necrozma-Dawn-Wings"], battle.prng, oldpoke.level, oldpoke.evs))![0] : Teams.unpack(getRougeSet(PokemonPool["Necrozma-Dusk-Mane"], battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'druddigon': newpoke = Teams.unpack(getRougeSet(PokemonPool.Zekrom, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
 		case 'lapras': newpoke = Teams.unpack(getRougeSet(PokemonPool.Kyurem, battle.prng, oldpoke.level, oldpoke.evs))![0]; break
