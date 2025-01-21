@@ -28,7 +28,7 @@ export const Formats: FormatList = [
 		section: "S/V Singles",
 	},
 	{
-		name: "[Gen 9] Random Battle",
+		name: "[Gen 9] Rando Battle",
 		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3712619/">Random Battle Suggestions</a>`,
